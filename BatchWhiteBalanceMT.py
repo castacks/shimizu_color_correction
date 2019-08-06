@@ -41,11 +41,14 @@ class ThreadWhitebalance(Thread):
 
             # Get the name components of the file name.
             fn  = os.path.split( img )[1]
-            ext = os.path.splitext( fn )[1]
+            # ext = os.path.splitext( fn )[1]
             fn  = os.path.splitext( fn )[0]
 
+            # Only support PNG currently.
+            ext = ".png"
+
             # Save the balanced image.
-            cv2.imwrite( self.outDir + "/" + fn + ext, cvImg )
+            cv2.imwrite( self.outDir + "/" + fn + ext, cvImg, [ cv2.IMWRITE_PNG_COMPRESSION, 0 ] )
 
             count += 1
 
