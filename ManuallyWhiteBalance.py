@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+from Gamma import adjust_gamma
+
 def convert_hex_2_rgb(h):
     """Convert a string of hexadecimal numbers starting with # into BGR values and stored as a list."""
 
@@ -111,6 +113,7 @@ if __name__ == "__main__":
     parser.add_argument("--avg", action="store_true", default=False, help="Use the average BGR values as the target.")
     parser.add_argument("--vc", action="store_true", default=False, help="Perform vignetting correction.")
     parser.add_argument("--vc-a", type=str, default="vca.dat", help="The filename of the vignetting-correction coefficients.")
+    parser.add_argument("--gamma", type=float, default=1.0, help="The Gamma correction coefficient. Use Gamma > 1.0 to make the image brighter.")
 
     args = parser.parse_args()
 
@@ -211,3 +214,11 @@ if __name__ == "__main__":
         # Plot the vignetting-correction curve.
         fn = namePart + "_VC_F.png"
         plot_vignetting_correction_curve(a, fn = fn)
+
+    if ( args.gamma != 1.0 ):
+        imgGamma = adjust_gamma( imgBalanced, args.gamma )
+
+        # Save the Gamma corrected image.
+        fn = namePart + "_Balanced_Gamma.png"
+        cv2.imwrite( fn, imgGamma )
+        print("The balanced + gamma corrected image is saved as %s." % ( fn ))
