@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Manually white balance am image.')
     parser.add_argument("--input-image", type=str, help="The input image.")
-    parser.add_argument("--target-bgr", type=str, default="#a6a6a6", help="The target rgb value written in hexadecimal form by a leading # symbol or comma seperated integers.")
+    parser.add_argument("--target-bgr", type=str, default="", help="The target rgb value written in hexadecimal form by a leading # symbol or comma seperated integers.")
     parser.add_argument("--x", type=int, default=-1, help="The column index of the window center. -1 for using the center of the image.")
     parser.add_argument("--y", type=int, default=-1, help="The row index of the window center. -1 for using the center of the image.")
     parser.add_argument("--bf", type=str, default="bf.dat", help="The filename of the balacing factor output file.")
@@ -153,6 +153,7 @@ if __name__ == "__main__":
     # The target BGR value.
     if ( args.target_bgr != '' ):
         targetBGR = get_bgr_value( args.target_bgr )
+        print("Use input target: %s" % (args.target_bar))
     elif ( True == args.avg ):
         # Calculate the average BGR values.
         averageBGR = int(centerPixel.mean())
