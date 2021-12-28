@@ -29,6 +29,16 @@ def convert_hex_2_rgb(h):
     
     return rgb
 
+def convert_string_2_list(in_arg):
+    ss = in_arg.split(',')
+    return [ int(s.strip()) for s in ss ]
+
+def get_bgr_value(in_arg):
+    if ( in_arg[0] == '#' ):
+        return np.array( convert_hex_2_rgb( in_arg ) )
+    else:
+        return np.array( convert_string_2_list( in_arg ) )
+
 def calibrate_vignetting_mask(img, w=9):
     """
     This funcion takes a gray scale image and try to find a 6-order radial response function
@@ -105,7 +115,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Manually white balance am image.')
     parser.add_argument("--input-image", type=str, help="The input image.")
-    # parser.add_argument("--target-rgb", type=str, default="#a6a6a6", help="The target rgb value written in hexadecimal form by a leading # symbol.")
+    parser.add_argument("--target-bgr", type=str, default="#a6a6a6", help="The target rgb value written in hexadecimal form by a leading # symbol or comma seperated integers.")
     parser.add_argument("--x", type=int, default=-1, help="The column index of the window center. -1 for using the center of the image.")
     parser.add_argument("--y", type=int, default=-1, help="The row index of the window center. -1 for using the center of the image.")
     parser.add_argument("--bf", type=str, default="bf.dat", help="The filename of the balacing factor output file.")
@@ -141,10 +151,9 @@ if __name__ == "__main__":
     print("The BGR values of the center pixel is (%d, %d, %d)." % ( centerPixel[0], centerPixel[1], centerPixel[2] ))
 
     # The target BGR value.
-    # targetBGR = convert_hex_2_rgb( args.target_rgb )
-    # targetBGR = np.array( targetBGR )
-
-    if ( True == args.avg ):
+    if ( args.target_bgr != '' ):
+        targetBGR = get_bgr_value( args.target_bgr )
+    elif ( True == args.avg ):
         # Calculate the average BGR values.
         averageBGR = int(centerPixel.mean())
         targetBGR = np.array([ averageBGR, averageBGR, averageBGR ], dtype=np.int)

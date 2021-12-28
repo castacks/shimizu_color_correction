@@ -126,6 +126,7 @@ if __name__ == "__main__":
     parser.add_argument("inimage", type=str, help="The input image.")
     parser.add_argument("--window-width", type=int, default=9, help="The window width for evaluating the BGR values.")
     parser.add_argument("--vc-a", type=str, default="vca.dat", help="The filename of the vignetting-correction coefficients.")
+    parser.add_argument("--convert-to-gray", action='store_true', default=False, help="Convert the input image into grayscale.")
 
     args = parser.parse_args()
 
@@ -133,6 +134,9 @@ if __name__ == "__main__":
 
     # Load the input image.
     imgOri = cv2.imread( args.inimage, cv2.IMREAD_UNCHANGED )
+
+    if ( args.convert_to_gray ):
+        imgOri = cv2.cvtColor(imgOri, cv2.COLOR_BGR2GRAY)
 
     if ( 2 != len( imgOri.shape ) ):
         raise Exception("len( imgOri.shape ) == %d." % ( len( imgOri.shape )))
